@@ -1,0 +1,1007 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Intercultural Touist Spots — India • Cambodia • Vietnam</title>
+  <meta name="description" content="Intercultural heritage showcase — India-priority, scrolling animations, and clickable info panels for major monuments." />
+  <style>
+    /* -----------------------------
+       VARIABLES & RESET
+       ----------------------------- */
+    :root{
+      --bg:#fff7eb;
+      --surface:#fff;
+      --ink:#1b1b1b;
+      --muted:#596066;
+      --line:#e8e6e3;
+      --accent:#e68427;
+      --accent-2:#ff2f00;
+      --radius:14px;
+      --shadow:0 10px 28px rgba(18,32,51,0.09);
+      --maxw:1200px;
+      --glass:rgba(255,255,255,0.92);
+      --fz-lg:clamp(20px,3vw,36px);
+      --nav-h:64px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at top left,#ffe5c3 0,transparent 55%),
+        radial-gradient(circle at bottom right,#ffe4d1 0,transparent 55%),
+        var(--bg);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+      -webkit-text-size-adjust:100%;
+    }
+
+    .container{width:min(var(--maxw),94%);margin:0 auto}
+
+    /* -----------------------------
+       HEADER & NAV
+       ----------------------------- */
+    header.site-header{
+      position:sticky;
+      top:0;
+      z-index:90;
+      background:linear-gradient(180deg,rgba(255,255,255,0.98),rgba(255,255,255,0.9));
+      border-bottom:1px solid var(--line);
+      backdrop-filter:blur(8px);
+      transition:box-shadow .25s ease,transform .25s ease;
+      height:var(--nav-h);
+      display:flex;
+      align-items:center;
+    }
+    .site-header.scrolled{box-shadow:0 16px 35px rgba(18,32,51,0.14);transform:translateY(-1px)}
+    .nav{display:flex;align-items:center;justify-content:space-between;width:100%;gap:12px;padding:0 6px}
+    .brand{font-weight:800;display:flex;gap:10px;align-items:center;color:var(--ink);text-decoration:none}
+    .logo{
+      width:36px;height:36px;border-radius:9px;
+      display:grid;place-items:center;color:white;font-weight:800;
+      background:conic-gradient(from 210deg,var(--accent),var(--accent-2),#ffb347,var(--accent));
+      box-shadow:0 10px 25px rgba(204,59,27,0.45);
+      flex:0 0 auto;
+    }
+
+    .nav-controls{display:flex;align-items:center;gap:14px}
+    .nav-links{display:flex;gap:12px;list-style:none;margin:0;padding:0;align-items:center;flex-wrap:wrap;justify-content:center;flex:1}
+    .nav-links a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:8px 10px;
+      border-radius:999px;
+      font-size:14px;
+      transition:background .18s ease,color .18s ease,transform .18s ease,box-shadow .18s ease;
+    }
+    .nav-links a:focus{outline:2px solid rgba(230,132,39,0.18);outline-offset:3px}
+    .nav-links a:hover{
+      color:var(--ink);
+      background:#fff;
+      transform:translateY(-1px);
+      box-shadow:var(--shadow);
+    }
+
+    /* -----------------------------
+       HERO
+       ----------------------------- */
+    .hero{
+      position:relative;
+      overflow:hidden;
+      border-bottom:1px solid var(--line);
+      min-height:68vh;
+    }
+    .hero-media{width:100%;height:100%}
+    .hero-media img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      transition:transform .25s ease-out;
+      aspect-ratio:16/9;
+    }
+    .hero-overlay{
+      position:absolute;inset:0;
+      background:linear-gradient(180deg,rgba(0,0,0,0.35) 0%, rgba(255,255,255,0.95) 50%);
+      z-index:1;pointer-events:none;
+    }
+    .hero-inner{
+      position:absolute;inset:0;display:flex;align-items:flex-end;z-index:4;padding:0 20px 40px;
+    }
+    .hero-card{
+      width:min(860px,95%);background:var(--glass);border-radius:14px;border:1px solid rgba(255,255,255,0.7);
+      padding:18px 20px 20px;box-shadow:0 20px 55px rgba(18,32,51,0.25);margin:0 auto;backdrop-filter:blur(8px);
+      transform:translateY(10px);animation:float 7s ease-in-out infinite;
+    }
+    .hero-card::before{
+      content:"";position:absolute;inset:auto 10% -18px;height:30px;filter:blur(14px);
+      background:radial-gradient(circle,#e9d3b3 0,transparent 65%);opacity:.7;z-index:-1;
+    }
+    .eyebrow{font-size:11px;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;margin:0 0 6px}
+    h1.title{font-family:Playfair Display,serif;font-size:clamp(26px,4vw,40px);margin:0 0 8px}
+    .accent{background:linear-gradient(90deg,var(--accent),var(--accent-2));
+       -webkit-background-clip:text;color: transparent}
+    .lead{margin:0 0 10px;color:var(--ink);max-width:40rem;font-size:clamp(14px,1.2vw,16px)}
+    .hero-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;font-size:12px;color:var(--muted)}
+    .chip{padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:#fff8f2}
+
+    .scroll-hint{
+      position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:5;font-size:12px;color:#fff7ee;
+      display:flex;flex-direction:column;align-items:center;gap:4px;text-shadow:0 2px 6px rgba(0,0,0,0.55);opacity:.85;
+    }
+    .scroll-hint span:nth-child(2){font-size:18px;animation:bounce 1.3s infinite}
+    @keyframes float{0%,100%{transform:translateY(10px);}50%{transform:translateY(0)}}
+    @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+
+    /* NEW BUTTON */
+.start-btn{
+  margin-top:15px;
+  padding:10px 18px;
+  background:var(--accent);
+  color:white;
+  border:0;border-radius:8px;
+  font-size:14px;
+  cursor:pointer;
+  transition:0.25s;
+}
+.start-btn:hover{
+  background:var(--accent-2);
+  transform:scale(1.07)
+}
+
+
+    /* -----------------------------
+       SECTIONS & GRID
+       ----------------------------- */
+    section{padding:56px 0;position:relative}
+    .section-title{font-size:clamp(20px,2.4vw,30px);margin:0 0 6px;font-weight:800}
+    .muted{color:var(--muted);margin:6px 0 0}
+
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px;}
+    /* featured first */
+    .featured-first .span-2{grid-column:span 2}
+
+    .photo-card{
+      height: 250px;
+      width: 250spx;
+
+    
+      background:var(--surface);border-radius:12px;border:1px solid var(--line);padding:0;cursor:pointer;overflow:hidden;
+      box-shadow:0 8px 26px rgba(18,32,51,0.06);transition:transform .26s ease,box-shadow .26s ease,background .26s ease;
+      transform-origin:center top;position:relative;display:flex;flex-direction:column;
+    }
+    .photo-card::after{
+      content:"";position:absolute;inset:0;background:radial-gradient(circle at top,rgba(255,255,255,0.4),transparent 60%);opacity:0;transition:opacity .25s ease;pointer-events:none;
+    }
+    .photo-card:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 22px 50px rgba(18,32,51,0.16);background:#fffaf4}
+    .photo-card:hover::after{opacity:1}
+    .photo-card img{width:100%;height:auto;object-fit:cover;border-radius:0 0 0 0;display:block;transition:transform .3s ease;aspect-ratio:4/3}
+    .photo-card:hover img{transform:scale(1.04)}
+    .photo-caption{font-size:0.92rem;color:var(--muted);margin:10px;text-align:center}
+
+    article.card{background:var(--surface);border-radius:12px;border:1px solid var(--line);padding:18px;box-shadow:0 10px 30px rgba(18,32,51,0.08)}
+
+    /* -----------------------------
+       MODAL
+       ----------------------------- */
+    .modal-layer{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(6,8,12,0.55);z-index:200}
+    .modal-layer.active{display:flex}
+    .modal{width:min(900px,96%);max-height:86vh;overflow:auto;background:white;border-radius:16px;padding:22px 22px 20px;border:1px solid #f0ebe3;box-shadow:0 30px 80px rgba(6,8,12,0.7);position:relative}
+    .modal .row{display:grid;grid-template-columns:1.1fr 0.9fr;gap:18px;align-items:stretch}
+    .modal .row img{width:100%;height:100%;object-fit:cover;border-radius:10px}
+    .modal h3{margin:0 0 8px;font-family:Playfair Display,serif;font-size:22px}
+    .meta{font-size:0.92rem;color:var(--muted);margin-bottom:10px}
+    .close-btn{position:absolute;right:18px;top:14px;background:transparent;border:0;font-size:22px;cursor:pointer;color:var(--muted);transition:transform .15s ease}
+    .close-btn:hover{transform:scale(1.1)}
+    .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .tag{background:#f7f5f3;border:1px solid #eee;padding:6px 8px;border-radius:999px;font-size:13px;color:var(--muted)}
+
+    /* -----------------------------
+       REVEAL ANIMATIONS
+       ----------------------------- */
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+
+    /* -----------------------------
+       RESPONSIVE ADJUSTMENTS
+       ----------------------------- */
+    @media(max-width:1100px){
+      .grid-3{grid-template-columns:repeat(2,1fr)}
+      .featured-first .span-2{grid-column:span 2}
+    }
+    @media(max-width:880px){
+      .hero-inner{padding:0 12px 30px}
+      .hero-card{padding:16px 15px 18px}
+      .grid-3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+      .featured-first .span-2{grid-column:auto}
+      .photo-card img{aspect-ratio:3/2}
+      .hero-overlay{background:linear-gradient(180deg,rgba(0,0,0,0.25) 0%, rgba(255,255,255,0.98) 40%);}
+    }
+    @media(max-width:520px){
+      .hero{min-height:80vh}
+      .hero-card{padding:14px;font-size:14px}
+      .section{padding:40px 0}
+      .photo-caption{font-size:0.88rem;margin:8px}
+      .nav-links{justify-content:center;gap:8px}
+      .nav-links a{padding:6px 8px;font-size:13px}
+      .hero-overlay{background:linear-gradient(180deg,rgba(0,0,0,0.15) 0%, rgba(255,255,255,0.99) 30%);}
+      .scroll-hint{display:flex}
+    }
+
+    footer{text-align:center;padding:20px 0;font-size:13px;color:var(--muted);background:var(--surface);border-top:1px solid var(--line)}
+ 
+  /* ---------------- Tour Planner Avatar ---------------- */
+#tourPlannerAvatar{
+  position:fixed;
+  bottom:22px;
+  right:22px;
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  background:white;
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  cursor:pointer;
+  z-index:999999; /* keep visible all throughout the page */
+  transition:0.25s;
+  overflow:hidden;
+}
+
+#tourPlannerAvatar img{
+  width:100%;height:100%;object-fit:cover;
+}
+#tourPlannerAvatar:hover{
+  transform:scale(1.07);
+}
+
+/* ---------------- Popup Panel ---------------- */
+#tourPlannerPopup{
+  position:fixed;
+  bottom:110px;
+  right:22px;
+  width:300px;
+  background:white;
+  padding:20px;
+  border-radius:16px;
+  box-shadow:0 16px 35px rgba(0,0,0,0.25);
+  z-index:350;
+  display:none;
+}
+#tourPlannerPopup h2{
+  margin-top:0;
+  font-size:20px;
+  color:#333;
+}
+#tourPlannerPopup ul{
+  margin-left:18px;
+  margin-top:10px;
+}
+.close-planner{
+  position:absolute;
+  right:12px;
+  top:8px;
+  background:transparent;
+  border:0;
+  font-size:20px;
+  cursor:pointer;
+  color:#777;
+}
+#startPlanningBtn{
+  margin-top:12px;
+  width:100%;
+  padding:10px;
+  background:#e68427;
+  border:0;
+  color:white;
+  border-radius:10px;
+  font-size:14px;
+  cursor:pointer;
+}
+#startPlanningBtn:hover{
+  background:#cc3b1b;
+}
+
+/* ---------------- Chat Window ---------------- */
+#chatWindow{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  width:320px;
+  height:420px;
+  background:white;
+  border-radius:12px;
+  box-shadow:0 16px 40px rgba(0,0,0,0.25);
+  display:none;
+  flex-direction:column;
+  z-index:400;
+
+}
+#chatHeader{
+  background:#e68427;
+  color:white;
+  padding:12px;
+  font-size:16px;
+  font-weight:600;
+  display:flex;
+  justify-content:space-between;
+}
+#closeChat{
+  cursor:pointer;
+  font-size:20px;
+}
+#chatMessages{
+  flex:1;
+  padding:12px;
+  overflow-y:auto;
+}
+.chat-user{
+  background:#e6f2ff;
+  padding:8px 10px;
+  margin:6px 0;
+  border-radius:8px;
+  text-align:right;
+}
+.chat-bot{
+  background:#fff3e6;
+  padding:8px 10px;
+  margin:6px 0;
+  border-radius:8px;
+}
+#chatInputBox{
+  display:flex;
+  border-top:1px solid #ddd;
+}
+#chatInput{
+  flex:1;
+  padding:10px;
+  border:0;
+  outline:none;
+}
+#sendMsg{
+  width:70px;
+  background:#e68427;
+  color:white;
+  border:0;
+  cursor:pointer;
+}
+
+  </style>
+</head>
+<body style="background-color: rgb(199, 248, 100);">
+  <header class="site-header" id="siteHeader">
+    <div class="container">
+      <nav class="nav" aria-label="Main">
+        <a class="brand" href="#home">
+          <span class="logo" aria-hidden="true">✦</span>
+          Intercultural Tourist Spots
+        </a>
+
+        <div class="nav-controls">
+          <ul class="nav-links" role="menubar" id="desktopNav">
+            <li role="none"><a role="menuitem" href="#about" aria-label="About this project">About</a></li>
+            <li role="none"><a role="menuitem" href="#india" aria-label="India section">India</a></li>
+            <li role="none"><a role="menuitem" href="#cambodia" aria-label="Cambodia section">Cambodia</a></li>
+            <li role="none"><a role="menuitem" href="#vietnam" aria-label="Vietnam section">Vietnam</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="home" class="hero" aria-label="Intro hero">
+      <div class="hero-media" aria-hidden="true">
+        <img src="assets/photos/Taj-Mahal (1).jpg" alt="Taj Mahal — Agra" loading="lazy">
+      </div>
+      <div class="hero-overlay" aria-hidden="true"></div>
+
+      <div class="hero-inner container">
+        <div class="hero-card" role="region" aria-label="Intro">
+          <p class="eyebrow">India • Cambodia • Vietnam</p>
+          <h1 class="title"><span class="accent">India,Vietnam and Cambodia</span> at the crossroads of cultures</h1>
+          <p class="lead">
+            Scroll through living stories of stone and light — from the marble domes of Agra
+            to the pink sandstone of Angkor and lantern-filled nights in Hội An.
+            Tap any monument to open a quick travel guide.
+          </p>
+          <button class="start-btn" onclick="document.getElementById('india').scrollIntoView({behavior:'smooth'});">
+            Start with India
+          </button>
+          <div class="hero-meta">
+            <span class="chip">Architecture &amp; heritage</span>
+            <span class="chip">Asia-wide cultural exchanges</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="scroll-hint" aria-hidden="true">
+        <span>Scroll to explore</span>
+        <span>&darr;</span>
+      </div>
+    </section>
+
+    <section id="india" class="container section">
+      <header>
+        <h2 class="section-title">India</h2>
+        <p class="muted">
+          From the white marble of the Taj Mahal to the sandstone towers of Delhi,
+          the ghats of the east and the palaces of the south, India offers a full journey
+          through history, faith and everyday life.
+        </p>
+      </header>
+
+      <div class="grid-3 featured-first" style="margin-top:18px">
+        <div class="photo-card span-2" data-key="taj" tabindex="0" role="button" aria-pressed="false">
+          <img src="assets/photos/taj-mahal.jpg" alt="Taj Mahal" loading="lazy">
+          <div class="photo-caption">Taj Mahal — Agra, Uttar Pradesh </div>
+        </div>
+
+        <div class="photo-card" data-key="qutub" tabindex="0" role="button" aria-pressed="false">
+          <img src="assets/photos/minar.jpg" alt="Qutub Minar" loading="lazy">
+          <div class="photo-caption">Qutub Minar — Delhi</div>
+        </div>
+
+        <div class="photo-card" data-key="konark" tabindex="0" role="button" aria-pressed="false">
+          <img src="assets/photos/konark-sun-temple.jpg" alt="Konark Sun Temple" loading="lazy">
+          <div class="photo-caption">Konark Sun Temple — Odisha </div>
+        </div>
+
+        <article class="card span-2" aria-labelledby="intercultural-title">
+          <h3 id="intercultural-title" style="margin-top:0"><font color="orange">Intercultural threads</font></h3>
+          <p class="muted">
+            Stone chariots, calligraphed minarets and marble gardens tell stories of trade winds
+            and shared beliefs. From India, ideas and artisans travelled along sea routes,
+            shaping temple towers and mythic carvings across Southeast Asia. At the same time,
+            influences from Central Asia, Persia and Europe entered the subcontinent and can
+            still be read in arches, domes and city plans.
+          </p>
+        </article>
+      </div>
+
+      <h3 style="margin-top:26px;margin-bottom:8px;">More Indian highlights — 2 from each direction</h3>
+      <p class="muted" style="margin-bottom:12px;">
+        Click any card to open a short travel guide with the best time to visit and a quick tip.
+      </p>
+
+      <div class="grid-3" style="margin-top:10px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
+        <div class="photo-card" data-key="golden" tabindex="0" role="button" aria-pressed="false">
+          <img src="assets/photos/golden-temple.jpg" alt="Golden Temple Amritsar" loading="lazy">
+          <div class="photo-caption">Golden Temple — Amritsar </div>
+        </div>
+
+        <div class="photo-card" data-key="jaipur" tabindex="0" role="button" aria-pressed="false">
+          <img src="assets/photos/amber-fort-jaipur.jpg" alt="Amber Fort Jaipur" loading="lazy">
+          <div class="photo-caption">Jaipur Fort (Amber Fort) — Rajasthan </div>
+        </div>
+
+        <div class="photo-card" data-key="victoria" tabindex="0" role="button" aria-pressed="false">
+          <img src="assets/photos/victoria-memorial.jpg" alt="Victoria Memorial Kolkata" loading="lazy">
+          <div class="photo-caption">Victoria Memorial — Kolkata</div>
+        </div>
+
+        <div class="photo-card" data-key="mysore" tabindex="0" role="button" aria-pressed="false">
+          <img src="assets/photos/mysore-palace.jpg" alt="Mysore Palace Karnataka" loading="lazy">
+          <div class="photo-caption">Mysore Palace — Karnataka </div>
+        </div>
+
+        <div class="photo-card" data-key="gateway" tabindex="0" role="button" aria-pressed="false">
+          <img src="assets/photos/gateway-of-india.jpg" alt="Gateway of India Mumbai" loading="lazy">
+          <div class="photo-caption">Gateway of India — Mumbai </div>
+        </div>
+
+        <div class="photo-card" data-key="goa" tabindex="0" role="button" aria-pressed="false">
+          <img src="assets/photos/goa-beach.jpg" alt="Goa Beach India" loading="lazy">
+          <div class="photo-caption">Goa Beach — Goa </div>
+        </div>
+
+        <div class="photo-card" data-key="meenakshi" tabindex="0" role="button" aria-pressed="false">
+          <img src="assets/photos/meenakshi-temple.jpg" alt="Meenakshi Temple Madurai" loading="lazy">
+          <div class="photo-caption">Meenakshi Temple — Madurai</div>
+        </div>
+
+        <div class="photo-card" data-key="hampi" tabindex="0" role="button" aria-pressed="false">
+          <img src="assets/photos/hampi.jpg" alt="Hampi Virupaksha Temple" loading="lazy">
+          <div class="photo-caption">Hampi — Karnataka </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cambodia" class="container section">
+      <header>
+        <h2 class="section-title">Cambodia</h2>
+        <p class="muted">
+          The temples around Siem Reap once formed the heart of the Khmer Empire.
+          Their carvings preserve myths from India, local legends and scenes of daily life.
+        </p>
+      </header>
+      <div class="grid-3">
+        <div class="photo-card" data-key="angkor" tabindex="0" role="button" aria-pressed="false">
+          <img src="assets/photos/angkor-wat.jpg" alt="Angkor Wat" loading="lazy">
+          <div class="photo-caption">Angkor Wat — Siem Reap</div>
+        </div>
+        <div class="photo-card" data-key="bayon" tabindex="0" role="button" aria-pressed="false">
+          <img src="assets/photos/bayon-faces.jpg" alt="Bayon faces" loading="lazy">
+          <div class="photo-caption">Bayon — Angkor Thom</div>
+        </div>
+        <div class="photo-card" data-key="banteay" tabindex="0" role="button" aria-pressed="false">
+          <img src="assets/photos/banteay-srei.jpg" alt="Banteay Srei intricate carvings" loading="lazy">
+          <div class="photo-caption">Banteay Srei — Angkor</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="vietnam" class="container section">
+      <header>
+        <h2 class="section-title">Vietnam</h2>
+        <p class="muted">
+          Vietnam’s heritage stretches from ancient citadels in the north to trading ports on the
+          central coast and lantern-lit riverside towns that still celebrate old festivals.
+        </p>
+      </header>
+      <div class="grid-3">
+        <div class="photo-card" data-key="onepillar" tabindex="0" role="button" aria-pressed="false">
+          <img src="assets/photos/one-pillar-pagoda.jpg" alt="One Pillar Pagoda" loading="lazy">
+          <div class="photo-caption">One Pillar Pagoda — Hanoi</div>
+        </div>
+        <div class="photo-card" data-key="hoian" tabindex="0" role="button" aria-pressed="false">
+          <img src="assets/photos/hoi-an-lanterns.jpg" alt="Hội An lanterns" loading="lazy">
+          <div class="photo-caption">Hội An lanterns — Quảng Nam</div>
+        </div>
+        <div class="photo-card" data-key="thanglong" tabindex="0" role="button" aria-pressed="false">
+          <img src="assets/photos/thang-long-citadel.jpg" alt="Imperial Citadel of Thăng Long" loading="lazy">
+          <div class="photo-caption">Imperial Citadel — Thăng Long</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="container section">
+      <h1 class="section-title">About Us</h1>
+      <hr>
+      <br>
+      
+      <h2>About Our School</h2>
+      <img src="assets/photos/mckv1.jpg" height="200px" width="250px" style="margin: 20px;"><img src="assets/photos/mckv2.jpg" height="200px" width="250px" style="margin: 20px;"><img src="assets/photos/mckv3.jpg" height="200px" width="250px" style="margin: 20px;"><img src="assets/photos/mckv4.jpg" style="margin: 20px;" height="200px" width="250px" >
+      <br>
+      <h3>Introduction</h3>
+      <br>
+      <p>M. C. Kejriwal Vidyapeeth (MCKV) is an English medium institution affiliated with the Council for the Indian School Certificate Examinations, dedicated to nurturing students for success in the ICSE (Class 10) and ISC (Class 12) examinations. Since its establishment on 15 June 1997, the school has made significant strides in both academic achievements and co-curricular endeavours.
+
+<br><br>Originally founded exclusively for boys,  MCKV embraced a pivotal change in April 2024, transitioning to a co-educational model by welcoming girls into the pre-primary section. This transition will be gradual, extending to encompass all classes. This shift underscores the school's commitment to inclusivity and responsiveness to evolving educational paradigms.
+
+<br><br>The curriculum framework derives its inspiration from the National Education Policy 2020, offering a multi-dimensional approach that is outcome-specific and geared towards fostering 21st-century skills such as critical thinking, effective communication, creativity, and cross-cultural understanding. Central to its ethos is a student-centric approach, fostering care and recognizing the unique creative talents, interests, and inclinations of each individual. As a result, its students emerge as thoughtful, self-assured individuals, well-equipped to navigate life's complexities.</p>
+      <br><br>
+      <h3>Our Vission</h3>
+      <br>
+      <p>Children of M. C. Kejriwal Vidyapeeth will evolve into contented, rooted, dynamic and contributing citizens of the world.</p>
+      <br><br>
+      <h3>Our Mission</h3><br>
+      <p>To work towards our students’ holistic development by :<br><br>
+
+1.Providing, in a digitally enabled environment, a stimulating, facilitative, safe and joyful learning experience that nurtures our students’ innate potential and fosters the skills of thinking, creativity, effective communication, collaboration and connectedness 
+<br>2.Focusing on values, art and culture
+<br>3.Facilitating continuous personal and professional development of our staff to enable them to be contemporary in the field of education
+
+      <br><br><h2>Recognition of an International Dimension in Schools</h2>
+      <p class="muted">The India RIDS programme, formerly known as ISA and then IDS, rewards schools committed to embedding international awareness within their curriculum.</p>
+<br><p class="muted">RIDS provides a framework for schools to develop international activities across the curriculum, including collaborative work with partner schools, and opportunities to involve the wider community. Schools plan, execute and evaluate a range of project-based school activities which are then assessed against the RIDS criteria for certification.</p>
+<br><p class="muted">The India RIDS programme has evolved from the British Council’s global International School Award (ISA) programme which was active in 31 countries worldwide and is currently being delivered in the vUK, Greece, and Nigeria. In India, ISA/IDS ran from 2003 to 2020, reaching over 4000 private and government schools.</p>
+    </section>
+
+    <div id="modalLayer" class="modal-layer" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="modal" role="document" aria-labelledby="modalTitle">
+        <button class="close-btn" aria-label="Close" id="modalClose">&times;</button>
+        <div id="modalContent"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> Intercultural Tourist Spots — scrolling edition
+  </footer>
+
+  <script>
+    /* -----------------------------
+       PLACE INFO (UNCHANGED CONTENT)
+       ----------------------------- */
+    const PLACE_INFO = {
+      "taj": {
+        title: "Taj Mahal — Agra, India",
+        img: "assets/photos/taj-mahal.jpg",
+        short: "A 17th-century marble mausoleum built by Emperor Shah Jahan in memory of Mumtaz Mahal. Its gardens, riverfront setting and inlay work make it one of the most admired buildings in the world.The Taj Mahal, located in Agra, India, is one of the most iconic monuments in the world and a symbol of eternal love. Built by the Mughal emperor Shah Jahan in memory of his beloved wife Mumtaz Mahal, this magnificent white marble mausoleum blends Persian, Islamic, and Indian architectural styles. Its shimmering dome, intricate carvings, symmetrical gardens, and reflection pools create a breathtaking sight, especially at sunrise and sunset. Recognized as a UNESCO World Heritage Site, the Taj Mahal continues to inspire millions of visitors with its beauty, craftsmanship, and timeless story of love.",
+        why: "Why visit: iconic world monument, peaceful gardens and glowing marble at sunrise.",
+        best: "Best time: October–March (cooler, clearer skies).",
+        tip: "Tip: book tickets online and arrive early for softer light."
+      },
+      "qutub": {
+        title: "Qutub Minar — Delhi, India",
+        img: "assets/photos/minar.jpg",
+        short: "A soaring 73-metre brick and sandstone tower from the 12th–13th centuries, wrapped in Qur’anic calligraphy bands and surrounded by earlier temple fragments Qutub Minar, located in Delhi, is one of India’s most iconic historical monuments and a UNESCO World Heritage Site. Built in the early 13th century by Qutb-ud-din Aibak and later completed by his successors, the tower stands at an impressive 72.5 meters, making it the tallest brick minaret in the world. Its intricate carvings, detailed Quranic inscriptions, and Indo-Islamic architectural style reflect the craftsmanship of the Delhi Sultanate. Surrounding the minar are several important structures, including the Quwwat-ul-Islam Mosque and the Iron Pillar, adding to the site's rich historical significance. Qutub Minar remains a major tourist attraction and a symbol of India’s architectural heritage.",
+        why: "Why visit: dramatic vertical skyline and early Indo-Islamic motifs in one complex.",
+        best: "Best time: October–March.",
+        tip: "Tip: look for the older pillars and ruins scattered around the complex."
+      },
+      "konark": {
+        title: "Konark Sun Temple — Odisha, India",
+        img: "assets/photos/konark-sun-temple.jpg",
+        short: "A 13th-century temple envisioned as a colossal stone chariot for the sun god, with detailed carvings of dancers, animals and myth set close to the Bay of Bengal.The Konark Sun Temple, located in Odisha, India, is a stunning 13th-century architectural marvel dedicated to the Sun God, Surya. Designed in the shape of a colossal stone chariot, the temple features twelve intricately carved wheels and is pulled by seven majestic horses, symbolizing the passage of time. Built by King Narasimhadeva I of the Eastern Ganga dynasty, the temple is renowned for its detailed sculptures, celestial themes, and advanced engineering. Although parts of the structure are now in ruins, its artistry and grandeur remain awe-inspiring. Recognized as a UNESCO World Heritage Site, the Konark Sun Temple stands as a brilliant testament to India’s heritage, craftsmanship, and devotion.",
+        why: "Why visit: powerful coastal setting and some of India’s finest stone carving.",
+        best: "Best time: November–February.",
+        tip: "Tip: visit the on-site museum for restored sculptures and context."
+      },
+      "golden": {
+        title: "Golden Temple — Amritsar, India",
+        img: "assets/photos/golden-temple.jpg",
+        short: "The holiest shrine of Sikhism, surrounded by a shimmering sacred pool and a huge community kitchen that serves free meals to thousands every day.The Golden Temple, also known as Sri Harmandir Sahib, is the holiest shrine of Sikhism and a symbol of peace, equality, and devotion. Located in Amritsar, Punjab, the temple is renowned for its breathtaking gold-plated structure surrounded by the sacred Amrit Sarovar, whose calm waters reflect its radiant beauty. Built in the 16th century by Guru Arjan Dev, the temple welcomes people from all faiths and backgrounds, emphasizing inclusivity and harmony. Its serene atmosphere, soulful Gurbani recitations, and the community-run Langar—the world’s largest free kitchen—create an experience that is both spiritual and profound. The Golden Temple stands as a timeless beacon of faith, compassion, and unity.",
+        why: "Why visit: peaceful atmosphere, reflections of the temple at night and the experience of langar (community meal).",
+        best: "Best time: November–March; evenings are especially beautiful.",
+        tip: "Tip: Cover your head, wash your feet before entering and sit for langar at least once."
+      },
+      "jaipur": {
+        title: "Amber Fort — Jaipur, India",
+        img: "assets/photos/amber-fort-jaipur.jpg",
+        short: "A hilltop fort-palace overlooking Jaipur with courtyards, mirror-filled halls and gateways that mix Rajput and Mughal styles.Amber Fort, located just outside Jaipur in Rajasthan, is a majestic hilltop fortress known for its blend of Rajput and Mughal architecture. Built in the 16th century by Raja Man Singh, the fort is crafted from red sandstone and marble, giving it a grand yet elegant appearance. Its sprawling complex includes courtyards, palaces, temples, and the stunning Sheesh Mahal, a hall decorated with thousands of tiny mirrors that sparkle in the light. Overlooking the serene Maota Lake, Amber Fort offers panoramic views and a rich glimpse into royal life. With its artistic beauty, intricate carvings, and historical significance, it remains one of India’s most captivating heritage sites.",
+        why: "Why visit: grand architecture, views over the Aravalli hills and light-and-sound shows in the evening.",
+        best: "Best time: October–March, especially early morning or late afternoon.",
+        tip: "Tip: Walk or take a jeep up the hill and leave time for the Jaigarh fort above."
+      },
+      "victoria": {
+        title: "Victoria Memorial — Kolkata, India",
+        img: "assets/photos/victoria-memorial.jpg",
+        short: "A grand marble monument built in memory of Queen Victoria, blending British and Mughal elements with lush surrounding gardens.The Victoria Memorial, located in Kolkata, West Bengal, is a grand marble monument built in memory of Queen Victoria. Completed in 1921, it combines British and Mughal architectural styles, giving it a majestic and elegant appearance. Surrounded by lush gardens and a serene reflective lake, the memorial houses a museum filled with paintings, manuscripts, and artifacts from colonial India. Its iconic white dome, intricate sculptures, and spacious galleries make it one of Kolkata’s most famous landmarks. The Victoria Memorial stands today not only as a historical monument but also as a symbol of the city’s rich cultural and architectural heritage.",
+        why: "Why visit: iconic colonial-era architecture and a major museum of the British period.",
+        best: "Best time: November–February.",
+        tip: "Tip: Visit around sunset for soft light and relax on the lawns."
+      },
+      "mysore": {
+        title: "Mysore Palace — Karnataka, India",
+        img: "assets/photos/mysore-palace.jpg",
+        short: "A magnificent Indo-Saracenic palace known for its ornate halls, stained glass and the famous illumination with thousands of bulbs.Mysore Palace, located in Karnataka, is one of India’s most magnificent royal residences and a stunning example of Indo-Saracenic architecture. Originally the seat of the Wadiyar dynasty, the current palace was completed in 1912 and is known for its grand arches, domes, and intricately carved interiors. Its opulent Durbar Hall, vibrant stained-glass ceilings, and richly decorated chambers showcase remarkable craftsmanship and royal elegance. At night, the palace glows with nearly 100,000 lights, creating a breathtaking spectacle that draws visitors from around the world. Mysore Palace stands today as a symbol of Karnataka’s cultural heritage and regal history.",
+        why: "Why visit: dazzling royal grandeur and stunning night lighting on Sundays and during Dussehra.",
+        best: "Best time: October–March.",
+        tip: "Tip: Don’t miss the Kalyana Mantapa with its stained glass ceiling."
+      },
+      "gateway": {
+        title: "Gateway of India — Mumbai, India",
+        img: "assets/photos/gateway-of-india.jpg",
+        short: "A monumental arch built on the waterfront of Mumbai, marking the city as a major port in colonial times.The Gateway of India, located in Mumbai, is an iconic arch monument built during the British era to commemorate the visit of King George V and Queen Mary in 1911. Completed in 1924 and overlooking the Arabian Sea, it is made of yellow basalt and Indo-Saracenic architectural elements, giving it a grand and regal presence. The monument served as a ceremonial entrance for British viceroys and important dignitaries arriving by sea. Today, it stands as one of Mumbai’s most famous landmarks, bustling with visitors, ferry rides, and vibrant street life. The Gateway of India remains a symbol of the city’s history, resilience, and cultural charm.",
+        why: "Why visit: sea views, boat rides to Elephanta Caves and a lively promenade.",
+        best: "Best time: November–February, especially around sunset.",
+        tip: "Tip: Take a ferry to see the skyline from the water and visit nearby Colaba markets."
+      },
+      "goa": {
+        title: "Goa Beaches — Goa, India",
+        img: "assets/photos/goa-beach.jpg",
+        short: "A stretch of Arabian Sea coastline with palm-lined beaches, Portuguese churches, seafood shacks and water sports.Goa’s beaches are famous for their golden sands, swaying palm trees, and vibrant coastal atmosphere. From the lively shores of Baga and Calangute to the peaceful stretches of Palolem and Agonda, each beach offers something unique—whether it’s water sports, nightlife, or quiet relaxation. The coastline is dotted with beach shacks serving fresh seafood, while the sunsets paint the sky in breathtaking colors. With its mix of natural beauty, adventure, and laid-back charm, Goa’s beaches remain one of India’s most beloved getaway destinations.",
+        why: "Why visit: relaxed holiday mood, sunsets over the sea and mix of culture and nightlife.",
+        best: "Best time: November–February (dry and pleasant).",
+        tip: "Tip: Explore both busy North Goa and quieter South Goa for different vibes."
+      },
+      "meenakshi": {
+        title: "Meenakshi Temple — Madurai, India",
+        img: "assets/photos/meenakshi-temple.jpg",
+        short: "A major Dravidian temple complex with tall gopurams covered in colourful sculptures of gods, goddesses and mythical creatures.The Meenakshi Temple, located in Madurai, Tamil Nadu, is one of India’s most spectacular and ancient Hindu temples. Dedicated to Goddess Meenakshi and Lord Sundareswarar, it is renowned for its towering gopurams covered with thousands of brightly painted sculptures depicting gods, goddesses, and mythological stories. The temple complex, which dates back centuries and was expanded during the Nayak dynasty, features intricately carved pillars, sacred tanks, and beautifully decorated halls like the Thousand Pillar Mandapam. With its rich mythology, vibrant colors, and architectural grandeur, Meenakshi Temple stands as a living symbol of South India’s culture, devotion, and artistic excellence.",
+        why: "Why visit: stunning towers, crowded inner courtyards and strong living traditions of South Indian Hinduism.",
+        best: "Best time: December–February; evenings are atmospheric with lamps and chanting.",
+        tip: "Tip: Look for the thousand-pillared hall and observe the temple rhythms respectfully."
+      },
+      "hampi": {
+        title: "Hampi — Karnataka, India",
+        img: "assets/photos/hampi.jpg",
+        short: "Ruins of the Vijayanagara Empire scattered across a surreal boulder landscape, with temples, markets and riverside shrines.Hampi, located in Karnataka, is a UNESCO World Heritage Site known for its stunning ruins and breathtaking landscapes. Once the capital of the powerful Vijayanagara Empire, Hampi is filled with ancient temples, palaces, market streets, and massive stone structures that reflect exceptional craftsmanship. The iconic Virupaksha Temple, the stone chariot of Vittala Temple, and the royal enclosure showcase the grandeur of a bygone era. Surrounded by giant boulders, lush banana plantations, and the Tungabhadra River, Hampi offers a magical blend of history and natural beauty. It remains one of India’s most fascinating destinations for history lovers, travelers, and photographers.",
+        why: "Why visit: mix of archaeology, rural life and dramatic scenery.",
+        best: "Best time: November–February (not too hot for exploring).",
+        tip: "Tip: Rent a bicycle or scooter to reach different clusters of monuments and catch sunset from a hilltop."
+      },
+      "angkor": {
+        title: "Angkor Wat — Siem Reap, Cambodia",
+        img: "assets/photos/angkor-wat.jpg",
+        short: "The world’s largest religious monument, famous for its lotus towers, long galleries and bas-reliefs of epic stories such as the Churning of the Ocean of Milk.Angkor Wat, located in Siem Reap, Cambodia, is the largest religious monument in the world and a masterpiece of Khmer architecture. Built in the 12th century by King Suryavarman II, the temple was originally dedicated to the Hindu god Vishnu before gradually becoming a Buddhist site. Its grand towers, intricate bas-relief carvings, and perfectly symmetrical layout reflect extraordinary engineering and artistic skill. Surrounded by a wide moat and lush forests, Angkor Wat is especially magical at sunrise, when its silhouette glows against the sky. Today, it stands as a symbol of Cambodia’s cultural heritage and remains one of the most awe-inspiring archaeological wonders on the planet.",
+        why: "Why visit: spectacular sunrise silhouettes and endless relief carvings.",
+        best: "Best time: November–February.",
+        tip: "Tip: watch the light change from the reflection pools at dawn."
+      },
+      "bayon": {
+        title: "Bayon — Angkor Thom, Cambodia",
+        img: "assets/photos/bayon-faces.jpg",
+        short: "A richly layered temple covered in calm stone faces and scenes of everyday life in the Angkor kingdom, from markets to naval battles.The Bayon Temple, located in the ancient city of Angkor Thom in Cambodia, is famous for its mesmerizing stone faces and intricate carvings. Built in the late 12th century by King Jayavarman VII, the temple features over 200 serene, smiling faces carved into massive stone towers, giving it a mysterious and spiritual aura. Its detailed bas-reliefs depict scenes of daily life, historical battles, and religious stories, showcasing the artistic brilliance of the Khmer Empire. Surrounded by dense jungle and hidden passages, the Bayon offers an unforgettable blend of history, architecture, and quiet wonder, making it one of Angkor’s most captivating monuments.",
+        why: "Why visit: the mysterious smiling faces and maze-like passages.",
+        best: "Best time: November–February.",
+        tip: "Tip: go early or late in the day when the faces catch side-light."
+      },
+      "banteay": {
+        title: "Banteay Srei — Angkor, Cambodia",
+        img: "assets/photos/banteay-srei.jpg",
+        short: "A smaller 10th-century temple carved in pink sandstone, nicknamed the 'jewel of Khmer art' for its incredibly delicate details.Banteay Srei, located near Angkor in Cambodia, is a beautifully preserved 10th-century temple known for its stunning pink sandstone and incredibly detailed carvings. Often called the “Jewel of Khmer Art,” the temple is dedicated to the Hindu god Shiva and features intricate sculptures of deities, floral patterns, and mythological scenes that remain remarkably sharp even today. Unlike the larger temples of Angkor, Banteay Srei is smaller in scale, but its craftsmanship and elegance make it truly exceptional. Surrounded by peaceful forests, the temple’s warm, rose-colored glow and delicate artistry create a magical and intimate experience for visitor.",
+        why: "Why visit: incredibly fine carvings that you can view up close.",
+        best: "Best time: November–February.",
+        tip: "Tip: it’s further from central Angkor, so plan your transport ahead."
+      },
+      "onepillar": {
+        title: "One Pillar Pagoda — Hanoi, Vietnam",
+        img: "assets/photos/one-pillar-pagoda.jpg",
+        short: "A wooden pagoda rising from a single stone pillar in a lotus pond, symbolising purity and rebirth in Vietnamese Buddhism.The One Pillar Pagoda, located in Hanoi, Vietnam, is one of the country’s most iconic and unique Buddhist temples. Built in the 11th century by Emperor Lý Thái Tông, the pagoda was designed to resemble a lotus blossom rising from a single stone pillar, symbolizing purity and enlightenment. Its wooden structure, perched gracefully above a small lotus pond, creates a serene and delicate appearance. Despite its modest size, the temple holds deep cultural and spiritual significance for the Vietnamese people. Surrounded by peaceful gardens, the One Pillar Pagoda remains a cherished historical monument and a popular attraction in Hanoi.",
+        why: "Why visit: compact, symbolic and photogenic stop in central Hanoi.",
+        best: "Best time: Spring or Autumn.",
+        tip: "Tip: combine with the nearby Ho Chi Minh complex and museum."
+      },
+      "hoian": {
+        title: "Hội An Lantern Nights — Quảng Nam, Vietnam",
+        img: "assets/photos/hoi-an-lanterns.jpg",
+        short: "On festival evenings, Hội An’s riverside streets glow with silk lanterns, reflecting centuries of trade between Vietnam, China, Japan and beyond.Hoi An, located on Vietnam’s central coast, is a beautifully preserved ancient town known for its colorful lanterns, charming streets, and blend of Vietnamese, Chinese, and Japanese architecture. Once a bustling trading port, the town is now famous for its riverside cafes, wooden shop-houses, and historic landmarks like the Japanese Covered Bridge. At night, Hoi An transforms into a glowing lantern paradise, creating a magical atmosphere along the Thu Bon River. With its warm culture, delicious cuisine, and timeless beauty, Hoi An remains one of Vietnam’s most enchanting and unforgettable destinations.",
+        why: "Why visit: magical night atmosphere, craft workshops and riverside food.",
+        best: "Best time: February–April and August–October.",
+        tip: "Tip: try making your own lantern in one of the small family studios."
+      },
+      "thanglong": {
+        title: "Imperial Citadel of Thăng Long — Hanoi, Vietnam",
+        img: "assets/photos/thang-long-citadel.jpg",
+        short: "The Thang Long Imperial Citadel, located in Hanoi, Vietnam, is a UNESCO World Heritage Site that showcases over a thousand years of Vietnamese history and culture. Originally built in the 11th century during the Lý Dynasty, the citadel served as the political and cultural center of Vietnam for many dynasties. Its ancient gates, royal foundations, archaeological relics, and iconic Flag Tower reflect the grandeur of past empires. Excavations have uncovered palaces, drainage systems, and artifacts that highlight the citadel’s advanced architecture and strategic importance. Today, the Thang Long Imperial Citadel stands as a proud symbol of Vietnam’s resilience, heritage, and long-lasting civilization.",
+        why: "Why visit: layers of royal history right in the middle of modern Hanoi",
+        best: "Best time: March–May or September–November.",
+        tip: "Tip: don’t miss the underground bunker used during the 20th-century wars."
+      }
+    };
+
+    /* -----------------------------
+       DOM ELEMENTS
+       ----------------------------- */
+    const modalLayer = document.getElementById('modalLayer');
+    const modalContent = document.getElementById('modalContent');
+    const modalClose = document.getElementById('modalClose');
+    const siteHeader = document.getElementById('siteHeader');
+    const heroImg = document.querySelector('.hero-media img');
+    const heroCard = document.querySelector('.hero-card');
+
+    /* -----------------------------
+       MODAL BUILD / OPEN / CLOSE
+       ----------------------------- */
+    function buildModalHTML(key){
+      const p = PLACE_INFO[key];
+      if(!p) return '<div style="padding:20px">No information available.</div>';
+      return `
+        <div style="position:relative">
+          <div class="row">
+            <div>
+              <h3 id="modalTitle">${p.title}</h3>
+              <div class="meta">${p.why}</div>
+              <p style="margin-top:8px">${p.short}</p>
+              <div class="tags">
+                <div class="tag">${p.best}</div>
+                <div class="tag">${p.tip}</div>
+              </div>
+            </div>
+            <div>
+              <img src="${p.img}" alt="${p.title}" loading="lazy">
+            </div>
+          </div>
+          <div style="margin-top:14px;color:#696e73;font-size:13px">
+            <strong>Quick note</strong>: Always check local guidance and opening times before you travel.
+          </div>
+        </div>
+      `;
+    }
+
+    let lastFocused = null;
+    function openModal(key){
+      lastFocused = document.activeElement;
+      modalContent.innerHTML = buildModalHTML(key);
+      modalLayer.classList.add('active');
+      modalLayer.setAttribute('aria-hidden','false');
+      modalClose.focus();
+      document.body.style.overflow = 'hidden';
+      // simple focus trap: keep focus inside modal on Tab
+      document.addEventListener('focus', enforceModalFocus, true);
+    }
+
+    function enforceModalFocus(e){
+      if(!modalLayer.classList.contains('active')) return;
+      if(!modalLayer.contains(e.target)){
+        e.stopPropagation();
+        modalClose.focus();
+      }
+    }
+
+    function closeModal(){
+      modalLayer.classList.remove('active');
+      modalLayer.setAttribute('aria-hidden','true');
+      modalContent.innerHTML = '';
+      document.body.style.overflow = '';
+      document.removeEventListener('focus', enforceModalFocus, true);
+      if(lastFocused) lastFocused.focus();
+    }
+
+    /* -----------------------------
+       ATTACH CLICK/KEY HANDLERS FOR CARDS
+       ----------------------------- */
+    document.querySelectorAll('.photo-card').forEach(card=>{
+      card.addEventListener('click',()=>{
+        const key = card.dataset.key;
+        if(key) openModal(key);
+      });
+      card.addEventListener('keydown',e=>{
+        if(e.key==='Enter' || e.key===' '){
+          e.preventDefault();
+          const key = card.dataset.key;
+          if(key) openModal(key);
+        }
+      });
+      // ensure aria states remain correct on activation
+      card.addEventListener('mousedown',()=>card.setAttribute('aria-pressed','true'));
+      card.addEventListener('mouseup',()=>card.setAttribute('aria-pressed','false'));
+    });
+
+    modalClose.addEventListener('click',closeModal);
+    modalLayer.addEventListener('click',e=>{
+      if(e.target===modalLayer) closeModal();
+    });
+    document.addEventListener('keydown',e=>{
+      if(e.key==='Escape') {
+        closeModal();
+      }
+    });
+
+    /* -----------------------------
+       SCROLL REVEAL (IO)
+       ----------------------------- */
+    const io = new IntersectionObserver(entries=>{
+      entries.forEach(ent=>{
+        if(ent.isIntersecting){
+          ent.target.classList.add('visible');
+          io.unobserve(ent.target);
+        }
+      });
+    },{threshold:0.12});
+
+    document.querySelectorAll('section').forEach(s=>{
+      s.classList.add('reveal');
+      io.observe(s);
+    });
+
+    /* -----------------------------
+       HERO PARALLAX & HEADER SHADOW
+       ----------------------------- */
+    window.addEventListener('scroll',()=>{
+      const y = window.scrollY || window.pageYOffset;
+      if(heroImg){
+        const parallax = Math.max(0, y * 0.18);
+        // Corrected template literal string interpolation
+        heroImg.style.transform = translateY($,{parallax},px); scale($,{1 : + Math.min(y/4000, 0.04)});
+      }
+      if(heroCard){
+        const max = window.innerHeight * 1.2;
+        const progress = Math.min(y / max, 1);
+        heroCard.style.transform = translateY($,{10 :- progress*26},px);
+      }
+      if(siteHeader){
+        if(y > 16) siteHeader.classList.add('scrolled');
+        else siteHeader.classList.remove('scrolled');
+      }
+    }, {passive:true});
+
+    /* -----------------------------
+       UTILITY: set year and minor enhancements
+       ----------------------------- */
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // avoid large layout shift on first paint — ensure images have aspect ratio by CSS (done)
+    // small accessibility improvement: allow keyboard users to skip to main content by focusing first section when pressing space on brand
+    document.querySelector('.brand').addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        const m = document.getElementById('main');
+        if(m) m.scrollIntoView({behavior:'smooth'});
+      }
+    });
+
+    /* -----------------------------
+       END
+       ----------------------------- */
+  </script>
+
+<div id="tourPlannerAvatar">
+  <img src="assets/photos/avater.jpg" alt="Tour Planner Assistant">
+</div>
+
+<div id="tourPlannerPopup">
+  <button class="close-planner">&times;</button>
+  <h2>Tour Planner Assistant</h2>
+  <p>I help plan trips across <strong>India</strong>, <strong>Vietnam</strong>, and <strong>Cambodia</strong>.</p>
+  <ul>
+    <li>Best places by month</li>
+    <li>Weather conditions of every month</li>
+    <li>Budget Estimates</li>
+    <li>Route suggestions</li>
+  </ul>
+  <button id="startPlanningBtn">Start Planning</button>
+</div>
+
+<div id="chatWindow">
+  <div id="chatHeader">
+    Tour Planner Assistant
+    <span id="closeChat">&times;</span>
+  </div>
+  <div id="chatMessages"></div>
+  <div id="chatInputBox">
+    <input type="text" id="chatInput" placeholder="Ask your tour planner...">
+    <button id="sendMsg">Send</button>
+  </div>
+</div>
+
+<script>
+// OPEN POPUP
+document.getElementById("tourPlannerAvatar").onclick = ()=>{
+  document.getElementById("tourPlannerPopup").style.display="block";
+};
+
+// CLOSE POPUP
+document.querySelector(".close-planner").onclick = ()=>{
+  document.getElementById("tourPlannerPopup").style.display="none";
+};
+
+// START PLANNING → OPEN CHAT
+document.getElementById("startPlanningBtn").onclick = ()=>{
+  document.getElementById("tourPlannerPopup").style.display="none";
+  document.getElementById("chatWindow").style.display="flex";
+
+  addBotMessage("Hello! Tell me when you're planning to travel and which country you're interested in — India, Vietnam, or Cambodia. I will be happy to share the details.");
+};
+
+// CLOSE CHAT
+document.getElementById("closeChat").onclick = ()=>{
+  document.getElementById("chatWindow").style.display="none";
+};
+
+// SEND MESSAGE
+document.getElementById("sendMsg").onclick = sendMessage;
+document.getElementById("chatInput").addEventListener("keypress",e=>{
+  if(e.key==="Enter") sendMessage();
+});
+
+function sendMessage(){
+  const input = document.getElementById("chatInput");
+  const msg = input.value.trim();
+  if(!msg) return;
+  
+  addUserMessage(msg);
+  input.value = "";
+
+  // Simulate bot response
+  setTimeout(()=>{
+    addBotMessage(generateBotReply(msg));
+  }, 400);
+}
+
+function addUserMessage(text){
+  const box = document.getElementById("chatMessages");
+  const msgDiv = document.createElement("div");
+  msgDiv.className = "chat-user";
+  msgDiv.textContent = text;
+  box.appendChild(msgDiv);
+  box.scrollTop = box.scrollHeight;
+}
+
+function addBotMessage(text){
+  const box = document.getElementById("chatMessages");
+  const msgDiv = document.createElement("div");
+  msgDiv.className = "chat-bot";
+  msgDiv.textContent = text;
+  box.appendChild(msgDiv);
+  box.scrollTop = box.scrollHeight;
+}
+
+// Basic bot logic for demo; replace with real AI integration if desired
+function generateBotReply(userMsg){
+  userMsg = userMsg.toLowerCase();
+  if (userMsg.includes("january")) return "In January, India, Vietnam, and Cambodia offer diverse travel experiences, with pleasant weather in most regions, though it can vary significantly by area. Cambodia and Southern Vietnam are in their dry season, providing sunny skies and low humidity. India is in its winter, with warm days in the south and cooler, snowy weather in the north. Peak tourist season occurs in all three countries during January, so book flights and accommodations in advance. January is the coolest month in India, though the weather depends on your location. It's a popular month for festivals and outdoor activities. In INDIA, you can visit Gulmarg, Auli, Varanasi, Goa, Kerala, Andaman and Nicobar Islands, Odupi, etc. In VIETNAM, you can visit Ho Chi Minh City, Mekong Delta, Phu Quoc Island, Hoi An, Da Nang, Nha Trang, Hanoi, Ha Long Bay, Sa Pa, etc. In CAMBODIA, you can visit Siem Reap (Angkor Wat), Phnom Penh, Sihanoukville beaches, Battambang, etc.";
+  return "Got it! For more details, tell me about your travel dates or preferred country.";
+}
+</script>
+</body>
+</html>
